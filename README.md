@@ -1,6 +1,6 @@
 # Velora AI — AI Video Studio Starter
 
-Free-to-start starter for an adults-only AI video studio. This repository currently includes a prompt-studio UI and a basic Express authentication backend. **Actual AI video generation is not connected yet**; the prompt button is preview-only.
+Free-to-start starter for an adults-only AI video studio. This repository includes a prompt-studio UI, a basic Express authentication backend, and a server-side Replicate image-to-video integration. Actual generation requires a valid `REPLICATE_API_TOKEN` and provider credits.
 
 ## Current features
 - Responsive dark UI, prompt box, aspect-ratio and duration choices
@@ -10,6 +10,7 @@ Free-to-start starter for an adults-only AI video studio. This repository curren
 - Server-side sessions stored in SQLite; HttpOnly/SameSite cookie, Secure in production
 - Basic login/register rate limiting and Helmet security headers
 - Health endpoint at `/api/health`
+- Image upload and server-side image-to-video job creation/status polling via Replicate
 
 ## Android setup
 Follow [ANDROID_SETUP.md](ANDROID_SETUP.md) to open and test the project from an Android phone using a browser-based development environment.
@@ -17,7 +18,7 @@ Follow [ANDROID_SETUP.md](ANDROID_SETUP.md) to open and test the project from an
 ## Run locally
 1. Install Node.js 20 or newer.
 2. Run `npm install`.
-3. Copy `.env.example` to `.env` and set a long random `SESSION_SECRET`.
+3. Copy `.env.example` to `.env`, set a long random `SESSION_SECRET`, and add `REPLICATE_API_TOKEN` from https://replicate.com/account/api-tokens.
 4. Run `npm run dev`.
 5. Open `http://localhost:3000`.
 
@@ -32,8 +33,8 @@ Follow [ANDROID_SETUP.md](ANDROID_SETUP.md) to open and test the project from an
 
 ## Planned next steps
 1. Add CSRF protection and production database/session-store setup.
-2. Select a provider with a suitable free tier and policies compatible with the site's intended lawful adult use.
-3. Add a server-side generation job endpoint, queue, quotas, and usage tracking.
-4. Add upload validation, secure file storage, moderation, deletion controls, and deployment instructions.
+2. Review the selected Replicate model's current pricing and content rules before using it. The integration uses `prunaai/p-video-2`; it is not a guarantee that explicit sexual content is permitted.
+3. Add a persistent job store, per-user quotas, usage tracking, moderation, and secure output storage before public launch.
+4. Add CSRF protection, robust age assurance, deletion controls, and deployment-specific security checks.
 
 This is a starter implementation, not a production-ready adult platform. Review and test security, privacy, legal, and provider requirements before public launch.
