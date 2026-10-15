@@ -51,7 +51,7 @@ const replicateRequest = async (url, options = {}) => {
  if (!response.ok) { const err = new Error(data.detail || data.error || `AI provider returned ${response.status}`); err.status = response.status; throw err; }
  return data;
 };
-const emailOk = value => typeof value === 'string' && value.length <= 254 && /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value);
+const emailOk = value => typeof value === 'string' && value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 const publicUser = user => ({ id: user.id, email: user.email, createdAt: user.created_at });
 
 app.post('/api/auth/register', authLimiter, async (req, res) => {
