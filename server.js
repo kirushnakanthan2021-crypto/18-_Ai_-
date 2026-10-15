@@ -40,7 +40,7 @@ app.use(session({
  cookie: { httpOnly: true, sameSite: 'lax', secure: isProduction, maxAge: 1000 * 60 * 60 * 24 * 7 }
 }));
 const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 20, standardHeaders: true, legacyHeaders: false });
-const emailOk = value => typeof value === 'string' && value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+const emailOk = value => typeof value === 'string' && value.length <= 254 && /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value);
 const publicUser = user => ({ id: user.id, email: user.email, createdAt: user.created_at });
 
 app.post('/api/auth/register', authLimiter, async (req, res) => {
@@ -85,5 +85,9 @@ app.post('/api/auth/logout', (req, res) => {
 });
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
 app.use(express.static(__dirname));
-app.get('*', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+// Express 5-compatible fallback for browser navigation.
+app.use((req, res, next) => {
+ if (req.method === 'GET' && req.accepts('html')) return res.sendFile(path.join(__dirname, 'index.html'));
+ next();
+});
 app.listen(port, () => console.log('Velora AI starter running on port ' + port));
